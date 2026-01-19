@@ -14,7 +14,7 @@ public class ProductoMapper {
                 jpa.getNombre(),
                 jpa.getDescripcion(),
                 jpa.getCategoria().getId(),
-                jpa.getPrecio,
+                jpa.getPrecio(),
                 jpa.getActivo()
         );
     }
