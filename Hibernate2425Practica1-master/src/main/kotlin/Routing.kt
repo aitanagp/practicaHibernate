@@ -1,6 +1,7 @@
 package ies.sequeros.dam.ad.orm
 
 import ies.sequeros.dam.ad.orm.endpoints.configureCategoriasRoutes
+import ies.sequeros.dam.ad.orm.endpoints.configureProductosRoutes
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.serialization.kotlinx.json.*
@@ -26,5 +27,6 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
         configureCategoriasRoutes()
+        configureProductosRoutes()
     }
 }
