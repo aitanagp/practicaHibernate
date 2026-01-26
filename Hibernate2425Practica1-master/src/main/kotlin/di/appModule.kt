@@ -13,27 +13,21 @@ import org.koin.dsl.onClose
 
 val appModulo = module {
 
-    // Configuración de la base de datos
     single<EntityManagerFactory> {
         Persistence.createEntityManagerFactory("UnidadPersistencia")
     }.onClose {
-        it?.close() // Se cierra la factoría al terminar [cite: 388, 391]
+        it?.close()
     }
 
-    // --- REPOSITORIOS ---
-    // El sistema infiere que necesitan el EntityManagerFactory y lo inyecta [cite: 393, 395]
     single<ICategoriaRepository> { JPACategoriaRepository(get()) }
     single<IProductoRepository> { JPAProductoRepository(get()) }
 
-    // --- CASOS DE USO DE CATEGORÍAS ---
     factory { GetCategoriaUseCase(get()) }
     factory { AddCategoriaUseCase(get()) }
     factory { UpdateCategoriaUseCase(get()) }
     factory { DeleteCategoriaUseCase(get()) }
     factory { GetAllCategoriaUseCase(get()) }
 
-    // --- CASOS DE USO DE PRODUCTOS ---
-    // Se usa 'factory' para crear una instancia nueva cada vez que se inyectan
     factory { AddProductoUseCase(get()) }
     factory { GetProductoUseCase(get()) }
     factory { GetAllProductoUseCase(get()) }

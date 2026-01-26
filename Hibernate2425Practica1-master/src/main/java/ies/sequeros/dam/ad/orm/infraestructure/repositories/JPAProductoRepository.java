@@ -2,6 +2,7 @@ package ies.sequeros.dam.ad.orm.infraestructure.repositories;
 
 import ies.sequeros.dam.ad.orm.domain.IProductoRepository;
 import ies.sequeros.dam.ad.orm.domain.Producto;
+import ies.sequeros.dam.ad.orm.infraestructure.entities.CategoriaJPA;
 import ies.sequeros.dam.ad.orm.infraestructure.entities.ProductoJPA;
 import ies.sequeros.dam.ad.orm.infraestructure.mappers.ProductoMapper;
 import jakarta.persistence.Entity;
@@ -30,7 +31,9 @@ public class JPAProductoRepository implements IProductoRepository {
                     ProductoJPA.class).getResultList();
             return items.stream().map(ProductoMapper::toDomain).toList();
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -41,8 +44,15 @@ public class JPAProductoRepository implements IProductoRepository {
         try {
             ProductoJPA producto = ProductoMapper.toJpa(item);
             tx.begin();
+            if (item.getCategoriaId() != null) {
+                CategoriaJPA catRef = em.getReference(CategoriaJPA.class, item.getCategoriaId());
+                producto.setCategoria(catRef);
+            } else {
+                throw new IllegalArgumentException("El producto debe tener una categoría");
+            }
             em.persist(producto);
             tx.commit();
+            item.setId(producto.getId());
         } catch (final RuntimeException e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -62,6 +72,10 @@ public class JPAProductoRepository implements IProductoRepository {
         try {
             final ProductoJPA producto = ProductoMapper.toJpa(item);
             tx.begin();
+            if (item.getCategoriaId() != null) {
+                CategoriaJPA catRef = em.getReference(CategoriaJPA.class, item.getCategoriaId());
+                producto.setCategoria(catRef);
+            }
             em.merge(producto);
             tx.commit();
         } catch (final RuntimeException e) {

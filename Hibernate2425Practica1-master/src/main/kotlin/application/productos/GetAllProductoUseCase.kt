@@ -8,6 +8,6 @@ import kotlinx.coroutines.withContext
 class GetAllProductoUseCase(private val repository: IProductoRepository) {
     suspend operator fun invoke(): List<ProductoDto> =
         withContext(Dispatchers.IO) {
-            repository.all().map { ProductoDto.fromDomain(it) } // [cite: 122]
+            repository.all().map { ProductoDto.fromDomain(it) }
         }
 }

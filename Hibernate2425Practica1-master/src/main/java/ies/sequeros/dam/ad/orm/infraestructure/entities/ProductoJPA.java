@@ -9,7 +9,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "producto")
 public class ProductoJPA {
-    public @NotNull BigDecimal getPrecio;
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;

@@ -9,6 +9,6 @@ import java.util.UUID
 class GetProductoUseCase(private val repository: IProductoRepository) {
     suspend operator fun invoke(id: UUID): ProductoDto? =
         withContext(Dispatchers.IO) {
-            repository.findById(id)?.let { ProductoDto.fromDomain(it) } // [cite: 127]
+            repository.findById(id)?.let { ProductoDto.fromDomain(it) }
         }
 }
